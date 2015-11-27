@@ -48,9 +48,9 @@ if sys.version_info < (3, 4, 0):
 if sys.version_info < (3, 3, 0):
     version_require.append('repoze.lru')
 
-
+name = 'sximada.recipe.requirements'
 setup(
-    name='sximada.recipe.requirements',
+    name=name,
     version=find_version('src'),
     description='Python package boilerplate',
     long_description=read('README.rst') + '\n\n' + read('CHANGES.rst'),
@@ -80,9 +80,7 @@ setup(
     zip_safe=False,
     test_suite='nose.collector',
     install_requires=[
-        'six',
-        'zope.interface',
-        'lazr.delegates',
+        'zc.buildout>=1.2.0',
     ] + version_require,
     tests_require=[
         'astroid',  # use by pylint
@@ -95,6 +93,7 @@ setup(
         'tox',
         'detox',
         'selenium',
+        'zope.testing',
     ],
     extras_require={
         'docs': [
@@ -114,6 +113,7 @@ setup(
             'tox',
             'detox',
             'selenium',
+            'zope.testing',
         ],
     },
     dependency_links=[
@@ -122,7 +122,12 @@ setup(
         'https://github.com/eventlet/eventlet/archive/master.zip#eggs=eventlet',
     ],
     entry_points="""\
-      [console_scripts]
-      sximada-boilerplate = sximada.boilerplate.commands:main
-      """,
+    [zc.buildout]
+    default = {name}:Scripts
+    script = {name}:Scripts
+    scripts = {name}:Scripts
+    eggs = {name}:Eggs
+    custom = {name}:Custom
+    develop = {name}:Develop
+    """.format(name=name),
     )
